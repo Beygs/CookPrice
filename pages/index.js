@@ -1,9 +1,30 @@
 import { PrismaClient } from "@prisma/client";
-import { useSession, signIn, signOut } from "next-auth/react";
+import axios from "axios";
+import { signIn, signOut } from "next-auth/react";
+import { useSession } from "../components/hooks/useSession";
 import Image from "next/image";
+import { useState } from "react";
+import { fetchSession } from "../components/hooks/useSession";
 
-export default function Component({ allergens }) {
-  const { data: session } = useSession();
+export default function Component() {
+  const [session, loading] = useSession();
+
+  const [ingredientName, setIngredientName] = useState("");
+  const [ingredientPrice, setIngredientPrice] = useState("");
+
+  const handleNewIngredient = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("/api/ingredient", {
+        name: ingredientName,
+        price: parseFloat(ingredientPrice),
+        userId: session.user.email,
+      });
+      console.log(res.data);
+    } catch (err) {
+      console.error(err.response.data);
+    }
+  };
 
   if (session) {
     return (
@@ -18,9 +39,19 @@ export default function Component({ allergens }) {
         Hello {session.user.name}! <br />
         Signed in as {session.user.email} <br />
         <button onClick={() => signOut()}>Sign out</button>
-        {allergens.map((allergen) => (
-          <p key={allergen.id}>{allergen.name}</p>
-        ))}
+        <form onSubmit={handleNewIngredient}>
+          <input
+            type="text"
+            value={ingredientName}
+            onChange={(e) => setIngredientName(e.target.value)}
+          />
+          <input
+            type="text"
+            value={ingredientPrice}
+            onChange={(e) => setIngredientPrice(e.target.value)}
+          />
+          <input type="submit" value="Envoyer" />
+        </form>
       </>
     );
   }
@@ -30,13 +61,4 @@ export default function Component({ allergens }) {
       <button onClick={() => signIn()}>Sign in</button>
     </>
   );
-}
-
-export const getStaticProps = async () => {
-  const prisma = new PrismaClient();
-  const allergens = await prisma.allergen.findMany();
-
-  return {
-    props: { allergens }
-  }
 }
