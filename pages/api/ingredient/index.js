@@ -8,14 +8,12 @@ const prisma = new PrismaClient();
 const newIngredient = async (req, res) => {
   const { name, price, userId, allergenIds } = req.body;
 
-  console.log(allergenIds);
-
   try {
     const result = await prisma.ingredient.create({
       data: {
         name,
         price,
-        user: { connect: { email: userId } },
+        user: { connect: { id: userId } },
         allergens: {
           connect: allergenIds?.map((allergen) => ({
             name: allergen,
