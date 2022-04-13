@@ -1,0 +1,19 @@
+@use "styles/abstracts/variables" as *;
+
+.header {
+  position: relative;
+  width: 100%;
+  border-bottom: 1px solid $light-grey;
+  padding: $default-padding;
+}
+
+.nav {
+  width: 100%;
+}
+
+.navItems {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

@@ -1,0 +1,37 @@
+@use "styles/abstracts/variables" as *;
+
+.hamburgerIconBtn {
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.hamburgerIcon {
+  height: 2rem;
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+
+  &.active,
+  &:hover {
+    fill: #ffa600;
+    transform: rotate(180deg + 45deg);
+  }
+}
+
+.hamburgerMenu {
+  display: none;
+  position: absolute;
+  padding: $default-padding;
+  top: 100%;
+  right: 0;
+  border: 1px solid $light-grey;
+  border-radius: $border-radius;
+  &.active {
+    display: block;
+  }
+}
+
+.navItems {
+  list-style: none;
+}
+

@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "lib/prismaClient";
 
 // POST /api/ingredient
 // Required fields in body: name, price, userId

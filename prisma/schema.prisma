@@ -60,30 +60,55 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model Recipe {
+  id          String                 @id @default(cuid())
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+  name        String                 @unique
+  ingredients IngredientsOnRecipes[]
+  user        User                   @relation(fields: [userId], references: [id])
+  userId      String
+  unit        String                 @default("g")
+}
+
 model Ingredient {
-  id        String     @id @default(cuid())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  name      String     @unique
+  id        String                   @id @default(cuid())
+  createdAt DateTime                 @default(now())
+  updatedAt DateTime                 @updatedAt
+  name      String                   @unique
   price     Float
-  allergens Allergen[]
-  recipes   Recipe[]
-  user      User       @relation(fields: [userId], references: [id])
+  allergens AllergensOnIngredients[]
+  recipes   IngredientsOnRecipes[]
+  user      User                     @relation(fields: [userId], references: [id])
   userId    String
+  unit      String                   @default("g")
 }
 
 model Allergen {
-  id          String       @id @default(cuid())
-  name        String       @unique
-  ingredients Ingredient[]
+  id          String                   @id @default(cuid())
+  name        String                   @unique
+  ingredients AllergensOnIngredients[]
 }
 
-model Recipe {
-  id          String       @id @default(cuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  name        String       @unique
-  ingredients Ingredient[]
-  user        User         @relation(fields: [userId], references: [id])
-  userId      String
+model IngredientsOnRecipes {
+  id           String     @id @default(cuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId String
+  recipe       Recipe     @relation(fields: [recipeId], references: [id])
+  recipeId     String
+  quantity     Int
+  unit         String     @default("g")
+}
+
+model AllergensOnIngredients {
+  id           String     @id @default(cuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId String
+  allergen     Allergen   @relation(fields: [allergenId], references: [id])
+  allergenId   String
+  presence     String
 }

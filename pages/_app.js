@@ -1,7 +1,9 @@
-import "../styles/globals.css";
+import "styles/globals.css";
+import "styles/reset.scss";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import Layout from "components/Layout";
 
 const queryClient = new QueryClient();
 
@@ -9,7 +11,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider session={session}>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
         <ReactQueryDevtools />
       </SessionProvider>
     </QueryClientProvider>
