@@ -1,0 +1,30 @@
+@use "./abstracts/variables" as *;
+
+.main {
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  padding: 0 2rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+.btn {
+  padding: $default-padding;
+  background-color: $orange;
+  border-radius: $border-radius * 2;
+  border: none;
+
+  &:hover {
+    background-color: lighten($orange, 5%);
+  }
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+}

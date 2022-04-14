@@ -64,7 +64,7 @@ model Recipe {
   id          String                 @id @default(cuid())
   createdAt   DateTime               @default(now())
   updatedAt   DateTime               @updatedAt
-  name        String                 @unique
+  name        String
   ingredients IngredientsOnRecipes[]
   user        User                   @relation(fields: [userId], references: [id])
   userId      String
@@ -75,7 +75,7 @@ model Ingredient {
   id        String                   @id @default(cuid())
   createdAt DateTime                 @default(now())
   updatedAt DateTime                 @updatedAt
-  name      String                   @unique
+  name      String
   price     Float
   allergens AllergensOnIngredients[]
   recipes   IngredientsOnRecipes[]

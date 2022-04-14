@@ -1,4 +1,9 @@
-import { hamburgerIconBtn, hamburgerIcon, active } from "./Hamburger.module.scss";
+import {
+  hamburgerIconBtn,
+  hamburgerIcon,
+  active,
+  blocker,
+} from "./Hamburger.module.scss";
 import { CroissantIcon } from "components/Icons";
 import LoggedInMenu from "./LoggedInMenu";
 import { useState } from "react";
@@ -23,13 +28,26 @@ const Hamburger = () => {
         />
       </button>
       {session ? (
-
-        <LoggedInMenu menuOpened={menuOpened} />
+        <>
+          <div
+            className={cn(blocker, {
+              [active]: menuOpened,
+            })}
+            onClick={() => setMenuOpened(false)}
+          />
+          <LoggedInMenu menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
+        </>
       ) : (
-        <LoggedOutMenu menuOpened={menuOpened} />
-      )
-
-      }
+        <>
+          <div
+            className={cn(blocker, {
+              [active]: menuOpened,
+            })}
+            onClick={() => setMenuOpened(false)}
+          />
+          <LoggedOutMenu menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
+        </>
+      )}
     </>
   );
 };

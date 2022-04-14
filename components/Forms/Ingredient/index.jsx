@@ -37,17 +37,11 @@ export default class Ingredient extends Component {
       (allergen) => allergen.id === id
     );
 
-    console.log(e.target.value);
-
     allergensClone[allergenId].presence = e.target.checked ? type : "none";
-
-    console.log(allergensClone);
 
     this.setState({
       allergens: allergensClone,
     });
-
-    console.log(this.state.allergens);
   };
 
   render() {

@@ -2,7 +2,7 @@ import cn from "classnames";
 import { signIn } from "next-auth/react";
 import { navItems, hamburgerMenu, active } from "../Hamburger.module.scss";
 
-const LoggedOutMenu = ({ menuOpened }) => {
+const LoggedOutMenu = ({ menuOpened, setMenuOpened }) => {
   return (
     <ul
       className={cn(navItems, hamburgerMenu, {
@@ -10,12 +10,17 @@ const LoggedOutMenu = ({ menuOpened }) => {
       })}
     >
       <li>
-        <button onClick={() => signIn()}>
+        <button
+          onClick={() => {
+            setMenuOpened(false);
+            signIn();
+          }}
+        >
           Me Connecter
         </button>
       </li>
     </ul>
-  )
-}
+  );
+};
 
-export default LoggedOutMenu
+export default LoggedOutMenu;

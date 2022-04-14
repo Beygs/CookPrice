@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { navItems, hamburgerMenu, active } from "../Hamburger.module.scss";
 
-const LoggedInMenu = ({ menuOpened }) => {
+const LoggedInMenu = ({ menuOpened, setMenuOpened }) => {
   const [session] = useSession();
 
   return (
@@ -16,7 +16,7 @@ const LoggedInMenu = ({ menuOpened }) => {
     >
       <li>
         <Link href="my-account">
-          <a>
+          <a onClick={() => setMenuOpened(false)}>
             <Image
               src={`/api/imageproxy?url=${encodeURIComponent(
                 session?.user?.image
@@ -31,16 +31,23 @@ const LoggedInMenu = ({ menuOpened }) => {
       </li>
       <li>
         <Link href="my-recipes">
-          <a>Mes recettes</a>
+          <a onClick={() => setMenuOpened(false)}>Mes recettes</a>
         </Link>
       </li>
       <li>
         <Link href="my-ingredients">
-          <a>Mes ingrédients</a>
+          <a onClick={() => setMenuOpened(false)}>Mes ingrédients</a>
         </Link>
       </li>
       <li>
-        <button onClick={() => signOut()}>Déconnexion</button>
+        <button
+          onClick={() => {
+            setMenuOpened(false);
+            signOut();
+          }}
+        >
+          Déconnexion
+        </button>
       </li>
     </ul>
   );

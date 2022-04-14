@@ -1,9 +1,6 @@
-import axios from "axios";
 import { signIn, signOut } from "next-auth/react";
 import { useSession } from "components/hooks/useSession";
 import Image from "next/image";
-import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export default function Component() {
   const [session, loading] = useSession();

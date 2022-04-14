@@ -1,5 +1,23 @@
+import {
+  form,
+  input,
+  invalid,
+  inputWrapper,
+  note,
+  active,
+  priceWrapper,
+  select,
+} from "./Ingredient.module.scss";
+import { btn } from "styles/Main.module.scss";
+import cn from "classnames";
+import { useState } from "react";
+
 const IngredientInfos = ({ nextStep, handleChange, values }) => {
   const { name, price, unit, ingredients } = values;
+
+  const [validName, setValidName] = useState(true);
+
+  const isValid = [name, validName, price].every(Boolean);
 
   const handleNameChange = (e) => {
     const ingredientNames = ingredients.map((ingredient) => ingredient.name);
@@ -7,41 +25,68 @@ const IngredientInfos = ({ nextStep, handleChange, values }) => {
 
     handleChange("name")(e);
 
-    if (ingredientNames.includes(value)) console.log("coucou");;
-  }
+    ingredientNames.includes(value) ? setValidName(false) : setValidName(true);
+  };
 
-  const handleQuantityChange = (e) => {
+  const handlePriceChange = (e) => {
     const value = e.target.value;
 
-    if (/^(\d*\.)?\d*$/.test(value)) handleChange("price")(e);
-  }
+    if (/^\d*\.?\d{0,2}$/.test(value)) handleChange("price")(e);
+  };
 
   const handleNext = (e) => {
     e.preventDefault();
+
     nextStep();
-  }
+  };
 
   return (
-    <form>
-      <input
-        type="text"
-        value={name}
-        placeholder="Nom de l'ingrédient"
-        onChange={handleNameChange}
-      />
-      <input
-        type="text"
-        value={price}
-        placeholder="Prix"
-        onChange={handleQuantityChange}
-      />
-      /
-      <select value={unit} onChange={handleChange("unit")}>
-        <option value="kg">kg</option>
-        <option value="L">L</option>
-        <option value="unité">unité</option>
-      </select>
-      <button onClick={handleNext}>Suivant</button>
+    <form className={form}>
+      <div>
+        <div className={inputWrapper}>
+          <input
+            type="text"
+            className={cn(input, {
+              [invalid]: !validName,
+            })}
+            value={name}
+            placeholder="Nom de l'ingrédient"
+            onChange={handleNameChange}
+          />
+          <p
+            className={cn(note, {
+              [active]: !validName,
+            })}
+          >
+            Cet ingrédient existe déjà
+          </p>
+        </div>
+        <div className={priceWrapper}>
+          <div className={inputWrapper}>
+            <input
+              type="text"
+              className={input}
+              value={price}
+              placeholder="Prix"
+              onChange={handlePriceChange}
+            />
+          </div>
+          <div>€&nbsp;/&nbsp;</div>
+          <select
+            value={unit}
+            className={`${input} ${select}`}
+            onChange={handleChange("unit")}
+          >
+            <option value="kg">kg</option>
+            <option value="L">L</option>
+            <option value="unité">unité</option>
+          </select>
+        </div>
+      </div>
+
+      <button className={btn} onClick={handleNext} disabled={!isValid}>
+        Suivant
+      </button>
     </form>
   );
 };

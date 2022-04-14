@@ -3,6 +3,7 @@ import { getSession } from "next-auth/react";
 
 const getIngredients = async (req, res) => {
   const session = await getSession({ req });
+
   if (session) {
     const ingredients = await prisma.ingredient.findMany({
       where: { userId: session.user.id },

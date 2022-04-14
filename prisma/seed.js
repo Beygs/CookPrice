@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const main = async () => {
-  const allergens = await prisma.allergen.createMany({
+  await prisma.allergen.createMany({
     data: [
       "Gluten",
       "Crustacés",
@@ -21,8 +21,6 @@ const main = async () => {
     ].map((name) => ({ name: name })),
     skipDuplicates: true,
   });
-
-  console.log(allergens);
 };
 
 main()
