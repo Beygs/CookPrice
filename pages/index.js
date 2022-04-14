@@ -7,38 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export default function Component() {
   const [session, loading] = useSession();
-  const queryClient = useQueryClient();
-
-  const [ingredientName, setIngredientName] = useState("");
-  const [ingredientPrice, setIngredientPrice] = useState("");
-
-  const { data: ingredients } = useQuery(
-    "ingredients",
-    async () => await axios.get("/api/ingredients")
-  );
-
-  const newIngredientMutation = useMutation(
-    () => {
-      return axios.post("/api/ingredient", {
-        name: ingredientName,
-        price: parseFloat(ingredientPrice),
-        userId: session.user.id,
-      });
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("ingredients");
-        setIngredientName("");
-        setIngredientPrice("");
-      },
-    }
-  );
-
-  const handleNewIngredient = (e) => {
-    e.preventDefault();
-    newIngredientMutation.mutate();
-  };
-
+  
   if (session) {
     return (
       <>
@@ -52,24 +21,6 @@ export default function Component() {
         Hello {session.user.name}! <br />
         Signed in as {session.user.email} <br />
         <button onClick={() => signOut()}>Sign out</button>
-        {ingredients?.data.map((ingredient) => (
-          <div key={ingredient.id}>
-            {ingredient.name}
-          </div>
-        ))}
-        <form onSubmit={handleNewIngredient}>
-          <input
-            type="text"
-            value={ingredientName}
-            onChange={(e) => setIngredientName(e.target.value)}
-          />
-          <input
-            type="text"
-            value={ingredientPrice}
-            onChange={(e) => setIngredientPrice(e.target.value)}
-          />
-          <input type="submit" value="Envoyer" />
-        </form>
       </>
     );
   }

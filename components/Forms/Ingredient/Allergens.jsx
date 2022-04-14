@@ -15,6 +15,18 @@ const Allergens = ({ prevStep, nextStep, values, handleAllergenChange }) => {
         price: parseFloat(price),
         unit,
         userId: session.user.id,
+        allergens: {
+          create: allergens
+            .filter((allergen) => allergen.presence !== "none")
+            .map((allergen) => ({
+              presence: allergen.presence,
+              allergen: {
+                connect: {
+                  id: allergen.id,
+                },
+              },
+            })),
+        },
       });
     },
     {
@@ -29,29 +41,39 @@ const Allergens = ({ prevStep, nextStep, values, handleAllergenChange }) => {
     e.preventDefault();
 
     prevStep();
-  }
+  };
 
   const handleNext = (e) => {
     e.preventDefault();
 
     newIngredientMutation.mutate();
-  }
+  };
 
   return (
     <form>
       {allergens.map((allergen) => (
-        <div style={{display: "flex"}} key={allergen.id}>
+        <div style={{ display: "flex" }} key={allergen.id}>
           <p>{allergen.name}</p>
           <label htmlFor="traces">Traces</label>
-          <input id="traces" type="checkbox" checked={allergen.presence === "traces"} onChange={handleAllergenChange(allergen.id, "traces")} />
+          <input
+            id="traces"
+            type="checkbox"
+            checked={allergen.presence === "traces"}
+            onChange={handleAllergenChange(allergen.id, "traces")}
+          />
           <label htmlFor="presence">Présence</label>
-          <input id="presence" type="checkbox" checked={allergen.presence === "presence"} onChange={handleAllergenChange(allergen.id, "presence")} />
+          <input
+            id="presence"
+            type="checkbox"
+            checked={allergen.presence === "presence"}
+            onChange={handleAllergenChange(allergen.id, "presence")}
+          />
         </div>
       ))}
       <button onClick={handlePrev}>Précédent</button>
       <button onClick={handleNext}>Suivant</button>
     </form>
-  )
-}
+  );
+};
 
-export default Allergens
+export default Allergens;

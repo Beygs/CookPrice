@@ -4,19 +4,16 @@ import prisma from "lib/prismaClient";
 // Required fields in body: name, price, userId
 // Optional fields in body: allergenIds
 const newIngredient = async (req, res) => {
-  const { name, price, userId, allergenIds } = req.body;
+  const { name, price, unit, userId, allergens } = req.body;
 
   try {
     const result = await prisma.ingredient.create({
       data: {
         name,
         price,
+        unit,
         user: { connect: { id: userId } },
-        allergens: {
-          connect: allergenIds?.map((allergen) => ({
-            name: allergen,
-          })),
-        },
+        allergens,
       },
     });
     res.status(200).json(result);

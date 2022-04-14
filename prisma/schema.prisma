@@ -108,7 +108,7 @@ model AllergensOnIngredients {
   updatedAt    DateTime   @updatedAt
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
   ingredientId String
-  allergen     Allergen   @relation(fields: [allergenId], references: [id])
-  allergenId   String
+  allergen     Allergen   @relation(fields: [allergenName], references: [name])
+  allergenName String
   presence     String
 }

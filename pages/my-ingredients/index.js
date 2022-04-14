@@ -19,7 +19,7 @@ const MyIngredients = ({ allergens }) => {
           show={showNewIngredientModal}
           setShow={setShowNewIngredientModal}
           allergens={allergens}
-          ingredients={ingredients.data}
+          ingredients={ingredients?.data ?? []}
         />
       )}
       <h2>Mes Ingrédients</h2>
