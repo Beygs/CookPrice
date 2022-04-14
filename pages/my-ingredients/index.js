@@ -25,7 +25,7 @@ const MyIngredients = ({ allergens }) => {
       <h2>Mes Ingrédients</h2>
       <button onClick={() => setShowNewIngredientModal(true)}>Ajouter un ingrédient</button>
       {ingredients?.data.map((ingredient) => (
-        <div key={ingredient.id}>{ingredient.name}</div>
+        <div key={ingredient.id}>{ingredient.name} =&gt; {ingredient.price}€ / {ingredient.unit}</div>
       ))}
     </>
   );

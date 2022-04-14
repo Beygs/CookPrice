@@ -99,7 +99,7 @@ model IngredientsOnRecipes {
   recipe       Recipe     @relation(fields: [recipeId], references: [id])
   recipeId     String
   quantity     Int
-  unit         String     @default("g")
+  unit         String     @default("kg")
 }
 
 model AllergensOnIngredients {
