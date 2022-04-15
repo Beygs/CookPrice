@@ -12,6 +12,8 @@ const getIngredients = async (req, res) => {
       },
     });
     res.status(200).json(ingredients);
+  } else {
+    res.status(401);
   }
 };
 

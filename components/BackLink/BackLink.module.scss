@@ -1,0 +1,8 @@
+@use "styles/abstracts/variables" as *;
+
+.backLink {
+  color: darken($light-grey, 30%);
+  border: none;
+  outline: none;
+  background: none;
+}

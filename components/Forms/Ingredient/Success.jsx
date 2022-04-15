@@ -1,6 +1,6 @@
 import successImg from "assets/images/ingredient_success.gif";
 import Image from "next/image";
-import { success } from "./Ingredient.module.scss";
+import { success } from "../Forms.module.scss";
 
 const Success = () => {
   return (

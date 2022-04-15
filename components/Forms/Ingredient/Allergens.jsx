@@ -6,7 +6,7 @@ import {
   checkboxWrapper,
   allergen as allergenStyle,
   actions,
-} from "./Ingredient.module.scss";
+} from "../Forms.module.scss";
 import { btn } from "styles/Main.module.scss";
 import { useState } from "react";
 
@@ -21,38 +21,37 @@ const Allergens = ({ prevStep, nextStep, values, handleAllergenChange }) => {
 
   const newIngredientMutation = useMutation(
     () => {
-      try {
-        setBtnTxt("Ajout en cours...");
-        setBtnsDisabled(true);
+      setBtnTxt("Ajout en cours...");
+      setBtnsDisabled(true);
 
-        axios.post("/api/ingredient", {
-          name,
-          price: parseFloat(price),
-          unit,
-          userId: session.user.id,
-          allergens: {
-            create: allergens
-              .filter((allergen) => allergen.presence !== "none")
-              .map((allergen) => ({
-                presence: allergen.presence,
-                allergen: {
-                  connect: {
-                    id: allergen.id,
-                  },
+      axios.post("/api/ingredient", {
+        name,
+        price: parseFloat(price),
+        unit,
+        userId: session.user.id,
+        allergens: {
+          create: allergens
+            .filter((allergen) => allergen.presence !== "none")
+            .map((allergen) => ({
+              presence: allergen.presence,
+              allergen: {
+                connect: {
+                  id: allergen.id,
                 },
-              })),
-          },
-        });
-      } catch (err) {
-        console.error(err);
-        setBtnTxt("Ajouter l'ingrédient");
-        setBtnsDisabled(false);
-      }
+              },
+            })),
+        },
+      });
     },
     {
       onSuccess: () => {
         queryClient.invalidateQueries("ingredients");
         nextStep();
+      },
+      onError: (err) => {
+        console.error(err);
+        setBtnTxt("Ajouter l'ingrédient");
+        setBtnDisabled(false);
       },
     }
   );

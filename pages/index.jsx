@@ -4,6 +4,10 @@ import Image from "next/image";
 
 export default function Component() {
   const [session, loading] = useSession();
+
+  if (loading) {
+    return (<div>Loading...</div>)
+  }
   
   if (session) {
     return (

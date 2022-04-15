@@ -7,7 +7,7 @@ import {
   active,
   priceWrapper,
   select,
-} from "./Ingredient.module.scss";
+} from "../Forms.module.scss";
 import { btn } from "styles/Main.module.scss";
 import cn from "classnames";
 import { useState } from "react";

@@ -1,8 +1,8 @@
 import prisma from "lib/prismaClient";
 
 // POST /api/ingredient
-// Required fields in body: name, price, userId
-// Optional fields in body: allergenIds
+// Required fields: name, price, userId
+// Optional fields: allergenIds
 const newIngredient = async (req, res) => {
   const { name, price, unit, userId, allergens } = req.body;
 
@@ -19,7 +19,7 @@ const newIngredient = async (req, res) => {
     res.status(200).json(result);
   } catch (err) {
     console.error(err);
-    res.status(403).json({ Error: err });
+    res.status(403).json({ error: err });
   }
 };
 

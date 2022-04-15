@@ -15,7 +15,7 @@ const LoggedInMenu = ({ menuOpened, setMenuOpened }) => {
       })}
     >
       <li>
-        <Link href="my-account">
+        <Link href="/my-account">
           <a onClick={() => setMenuOpened(false)}>
             <Image
               src={`/api/imageproxy?url=${encodeURIComponent(
@@ -30,12 +30,12 @@ const LoggedInMenu = ({ menuOpened, setMenuOpened }) => {
         </Link>
       </li>
       <li>
-        <Link href="my-recipes">
+        <Link href="/my-recipes">
           <a onClick={() => setMenuOpened(false)}>Mes recettes</a>
         </Link>
       </li>
       <li>
-        <Link href="my-ingredients">
+        <Link href="/my-ingredients">
           <a onClick={() => setMenuOpened(false)}>Mes ingrédients</a>
         </Link>
       </li>

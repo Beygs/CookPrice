@@ -13,6 +13,13 @@
   max-width: 900px;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
 .btn {
   padding: $default-padding;
   background-color: $orange;

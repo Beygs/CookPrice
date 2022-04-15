@@ -5,23 +5,23 @@ import {
   modal,
   header,
   cross,
-} from "./NewIngredientModal.module.scss";
+} from "./Modal.module.scss";
 
-const NewIngredientModal = ({ show, setShow, allergens, ingredients }) => {
+const Modal = ({ setShow, name, children }) => {
   return (
     <>
       <div className={blocker} onClick={() => setShow(false)} />
       <div className={modal}>
         <div className={header}>
-          <h2>Ajouter un ingrédient</h2>
+          <h2>{name}</h2>
           <button className={cross} onClick={() => setShow(false)}>
             <CrossIcon />
           </button>
         </div>
-        <Ingredient allergens={allergens} ingredients={ingredients} />
+        {children}
       </div>
     </>
   );
 };
 
-export default NewIngredientModal;
+export default Modal;

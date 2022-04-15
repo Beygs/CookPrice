@@ -68,7 +68,7 @@ model Recipe {
   ingredients IngredientsOnRecipes[]
   user        User                   @relation(fields: [userId], references: [id])
   userId      String
-  unit        String                 @default("g")
+  unit        String                 @default("kg")
 }
 
 model Ingredient {
@@ -81,7 +81,7 @@ model Ingredient {
   recipes   IngredientsOnRecipes[]
   user      User                     @relation(fields: [userId], references: [id])
   userId    String
-  unit      String                   @default("g")
+  unit      String                   @default("kg")
 }
 
 model Allergen {
