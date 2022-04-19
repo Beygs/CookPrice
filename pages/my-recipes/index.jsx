@@ -18,7 +18,10 @@ const MyRecipes = () => {
     <div className={container}>
       {showNewRecipeModal && (
         <Modal name="Ajouter une recette" setShow={setShowNewRecipeModal}>
-          <Recipe recipes={recipes?.data ?? []} setShow={setShowNewRecipeModal} />
+          <Recipe
+            recipes={recipes?.data ?? []}
+            setShow={setShowNewRecipeModal}
+          />
         </Modal>
       )}
       <div className={header}>
@@ -27,11 +30,15 @@ const MyRecipes = () => {
           Ajouter une recette
         </button>
       </div>
-      {recipes?.data.map((recipe) => (
-        <div key={recipe.id}>
-          {recipe.name}
-        </div>
-      ))}
+      <ul>
+        {recipes?.data.map((recipe) => (
+          <li key={recipe.id}>
+            <Link href={`/my-recipes/${recipe.slug}`}>
+              <a>{recipe.name}</a>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

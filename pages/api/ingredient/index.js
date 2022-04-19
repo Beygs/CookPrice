@@ -1,4 +1,5 @@
 import prisma from "lib/prismaClient";
+import slugify from "slugify";
 
 // POST /api/ingredient
 // Required fields: name, price, userId
@@ -14,6 +15,11 @@ const newIngredient = async (req, res) => {
         unit,
         user: { connect: { id: userId } },
         allergens,
+        slug: slugify(name, {
+          lower: true,
+          strict: true,
+          remove: /[*+~.()'"!:@]/g,
+        }),
       },
     });
     res.status(200).json(result);

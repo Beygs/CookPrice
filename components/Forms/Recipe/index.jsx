@@ -1,7 +1,8 @@
 import axios from "axios";
 import cn from "classnames";
 import { useSession } from "components/hooks/useSession";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useState, useRef, useEffect } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { btn } from "styles/Main.module.scss";
 import {
@@ -14,6 +15,8 @@ import {
 } from "../Forms.module.scss";
 
 const Recipe = ({ recipes, setShow }) => {
+  const nameRef = useRef()
+
   const [name, setName] = useState("");
   const [invalidName, setInvalidName] = useState(false);
   const [btnTxt, setBtnTxt] = useState("Ajouter la recette");
@@ -21,8 +24,13 @@ const Recipe = ({ recipes, setShow }) => {
 
   const [session] = useSession();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const canSave = [name, !invalidName].every(Boolean);
+
+  useEffect(() => {
+    nameRef.current.focus();
+  }, []);
 
   const handleChange = (e) => {
     const recipesNames = recipes.map((recipe) => recipe.name);
@@ -37,17 +45,20 @@ const Recipe = ({ recipes, setShow }) => {
       setBtnTxt("Ajout en cours...");
       setBtnDisabled(true);
 
-      await axios.post("/api/recipe", {
+      const response = await axios.post("/api/recipe", {
         name,
         userId: session.user.id,
       });
+
+      return response.data;
     },
     {
-      onSuccess: () => {
+      onSuccess: async (data) => {
         queryClient.invalidateQueries("recipes");
         setShow(false);
+        router.push(`/my-recipes/${data.slug}`)
       },
-      onError: (err) => {
+      onError: async (err) => {
         console.error(err);
         setBtnTxt("Ajouter la recette");
         setBtnDisabled(false);
@@ -71,6 +82,7 @@ const Recipe = ({ recipes, setShow }) => {
           type="text"
           placeholder="Nom de la recette"
           value={name}
+          ref={nameRef}
           onChange={handleChange}
         />
         <p
@@ -81,7 +93,7 @@ const Recipe = ({ recipes, setShow }) => {
           Recette déjà existante
         </p>
       </div>
-      <input type="submit" className={btn} value={btnTxt} disabled={!canSave && btnDisabled} />
+      <input type="submit" className={btn} value={btnTxt} disabled={!canSave && !btnDisabled} />
     </form>
   );
 };

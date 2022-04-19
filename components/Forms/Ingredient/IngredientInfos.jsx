@@ -10,14 +10,20 @@ import {
 } from "../Forms.module.scss";
 import { btn } from "styles/Main.module.scss";
 import cn from "classnames";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const IngredientInfos = ({ nextStep, handleChange, values }) => {
   const { name, price, unit, ingredients } = values;
 
+  const nameRef = useRef();
+
   const [validName, setValidName] = useState(true);
 
   const isValid = [name, validName, price].every(Boolean);
+
+  useEffect(() => {
+    nameRef.current.focus();
+  }, []);
 
   const handleNameChange = (e) => {
     const ingredientNames = ingredients.map((ingredient) => ingredient.name);
@@ -51,6 +57,7 @@ const IngredientInfos = ({ nextStep, handleChange, values }) => {
             })}
             value={name}
             placeholder="Nom de l'ingrédient"
+            ref={nameRef}
             onChange={handleNameChange}
           />
           <p

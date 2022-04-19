@@ -1,6 +1,7 @@
 // POST /api/recipe
 
 import prisma from "lib/prismaClient";
+import slugify from "slugify";
 
 // Required fields: name, userId
 const newRecipe = async (req, res) => {
@@ -11,6 +12,11 @@ const newRecipe = async (req, res) => {
       data: {
         name,
         user: { connect: { id: userId } },
+        slug: slugify(name, {
+          lower: true,
+          strict: true,
+          remove: /[*+~.()'"!:@]/g,
+        }),
       },
     });
 
