@@ -45,9 +45,10 @@
   }
 }
 
-.priceWrapper {
+.multiInputWrapper {
   display: flex;
   align-items: center;
+  gap: 0.1rem;
 }
 
 .select {

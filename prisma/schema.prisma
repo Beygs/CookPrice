@@ -106,6 +106,8 @@ model IngredientsOnRecipes {
   recipeId     String
   quantity     Int
   unit         String     @default("kg")
+
+  @@unique(fields: [ingredientId, recipeId])
 }
 
 model AllergensOnIngredients {

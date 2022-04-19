@@ -5,7 +5,7 @@ import {
   inputWrapper,
   note,
   active,
-  priceWrapper,
+  multiInputWrapper,
   select,
 } from "../Forms.module.scss";
 import { btn } from "styles/Main.module.scss";
@@ -68,7 +68,7 @@ const IngredientInfos = ({ nextStep, handleChange, values }) => {
             Cet ingrédient existe déjà
           </p>
         </div>
-        <div className={priceWrapper}>
+        <div className={multiInputWrapper}>
           <div className={inputWrapper}>
             <input
               type="text"

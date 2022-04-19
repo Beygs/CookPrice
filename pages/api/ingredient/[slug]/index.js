@@ -1,12 +1,12 @@
 import prisma from "lib/prismaClient";
-import { getSession } from "next-auth/react"
+import { getSession } from "next-auth/react";
 
 const handle = async (req, res) => {
   const slug = req.query.slug;
   const session = await getSession({ req });
 
   switch (req.method) {
-    case ("GET"): {
+    case "GET": {
       return handleGet(slug, session, res);
     }
     default: {
@@ -15,17 +15,19 @@ const handle = async (req, res) => {
       );
     }
   }
-}
+};
 
 // GET /api/ngredient/[slug]
 const handleGet = async (slug, session, res) => {
   const ingredient = await prisma.ingredient.findUnique({
     where: {
-      userId: session.user.id,
-      slug,
-    }
+      slugUserId: {
+        userId: session.user.id,
+        slug,
+      },
+    },
   });
   res.json(ingredient);
-}
+};
 
 export default handle;

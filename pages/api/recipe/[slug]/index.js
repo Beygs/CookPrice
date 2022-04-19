@@ -27,7 +27,19 @@ const handleGet = async (slug, session, res) => {
       },
     },
     include: {
-      ingredients: true,
+      ingredients: {
+        include: {
+          ingredient: {
+            select: {
+              name: true,
+              allergens: true,
+              price: true,
+              unit: true,
+              slug: true,
+            },
+          },
+        },
+      },
     },
   });
 
