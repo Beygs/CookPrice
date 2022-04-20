@@ -25,6 +25,7 @@
 .hamburgerMenu {
   display: none;
   position: absolute;
+  z-index: 20;
   padding: $default-padding;
   top: calc(100% + $default-padding);
   right: 0;

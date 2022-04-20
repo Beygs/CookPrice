@@ -16,7 +16,7 @@ const LoggedOutMenu = ({ menuOpened, setMenuOpened }) => {
             signIn();
           }}
         >
-          Me Connecter
+          Me&nbsp;Connecter
         </button>
       </li>
     </ul>

@@ -54,7 +54,7 @@ const Allergens = ({ prevStep, nextStep, values, handleAllergenChange }) => {
       onError: async (err) => {
         console.error(err);
         setBtnTxt("Ajouter l'ingrédient");
-        setBtnDisabled(false);
+        setBtnsDisabled(false);
       },
     }
   );

@@ -25,18 +25,18 @@ const LoggedInMenu = ({ menuOpened, setMenuOpened }) => {
               height="20px"
               alt="Profile picture"
             />
-            Mon compte
+            Mon&nbsp;compte
           </a>
         </Link>
       </li>
       <li>
         <Link href="/my-recipes">
-          <a onClick={() => setMenuOpened(false)}>Mes recettes</a>
+          <a onClick={() => setMenuOpened(false)}>Mes&nbsp;recettes</a>
         </Link>
       </li>
       <li>
         <Link href="/my-ingredients">
-          <a onClick={() => setMenuOpened(false)}>Mes ingrédients</a>
+          <a onClick={() => setMenuOpened(false)}>Mes&nbsp;ingrédients</a>
         </Link>
       </li>
       <li>
