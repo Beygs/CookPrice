@@ -6,7 +6,7 @@ import Success from "./Success";
 export default class Ingredient extends Component {
   state = {
     step: 0,
-    name: "",
+    name: this.props.name ?? "",
     price: "",
     unit: "kg",
     allergens: this.props.allergens.map((allergen) => ({

@@ -20,11 +20,11 @@ const Allergens = ({ prevStep, nextStep, values, handleAllergenChange }) => {
   const queryClient = useQueryClient();
 
   const newIngredientMutation = useMutation(
-    () => {
+    async () => {
       setBtnTxt("Ajout en cours...");
       setBtnsDisabled(true);
 
-      axios.post("/api/ingredient", {
+      const ingredient = await axios.post("/api/ingredient", {
         name,
         price: parseFloat(price),
         unit,
@@ -42,6 +42,8 @@ const Allergens = ({ prevStep, nextStep, values, handleAllergenChange }) => {
             })),
         },
       });
+
+      return ingredient;
     },
     {
       onSuccess: async () => {

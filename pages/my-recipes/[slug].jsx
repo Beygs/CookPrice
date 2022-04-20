@@ -5,17 +5,12 @@ import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useState } from "react";
 import { container, header, btn } from "styles/Main.module.scss";
-import {
-  input,
-  inputWrapper,
-  multiInputWrapper,
-  select,
-} from "components/Forms/Forms.module.scss";
 import { unitConverter } from "lib/converters";
 import { computeIngredientPrice } from "lib/computePrice";
 import IngredientOnRecipe from "components/Forms/IngredientOnRecipe";
+import prisma from "lib/prismaClient";
 
-const Recipe = () => {
+const Recipe = ({ allergens }) => {
   const [ingredientName, setIngredientName] = useState("");
   const [ingredientQuantity, setIngredientQuantity] = useState(0);
   const [ingredientUnit, setIngredientUnit] = useState("g");
@@ -24,12 +19,12 @@ const Recipe = () => {
   const { slug } = router.query;
   const queryClient = useQueryClient();
 
-  const { data: recipe, isLoading } = useQuery(
+  const { data: recipe, isLoading: recipeLoading } = useQuery(
     ["recipes", slug],
     async () => await axios.get(`/api/recipe/${slug}`)
   );
 
-  const { data: ingredients } = useQuery(
+  const { data: ingredients, isLoading: ingredientsLoading } = useQuery(
     ["ingredients"],
     async () => await axios.get("/api/ingredients")
   );
@@ -66,11 +61,11 @@ const Recipe = () => {
     addIngredient.mutate();
   };
 
-  if (isLoading) {
+  if (recipeLoading || ingredientsLoading) {
     return <div>Loading...</div>;
   }
 
-  if (recipe) {
+  if (recipe && ingredients) {
     return (
       <div className={container}>
         <Link href="/my-recipes">
@@ -79,7 +74,9 @@ const Recipe = () => {
         <div className={header}>
           <h2>{recipe.data.name}</h2>
           <div>
-            <p>Quantité de référence : {recipe.data.quantity} {recipe.data.unit}</p>
+            <p>
+              Quantité de référence : {recipe.data.quantity} {recipe.data.unit}
+            </p>
             <p>
               Prix :{" "}
               {recipe.data.ingredients
@@ -106,14 +103,19 @@ const Recipe = () => {
                   {computeIngredientPrice(
                     unitConverter(ingredient.quantity, ingredient.unit),
                     ingredient.ingredient.price
-                  )}
-                  )
+                  )}{" "}
+                  € )
                 </a>
               </Link>
             </li>
           ))}
         </ul>
-        <IngredientOnRecipe recipe={recipe} ingredients={ingredients} slug={slug} />
+        <IngredientOnRecipe
+          recipe={recipe}
+          ingredients={ingredients}
+          slug={slug}
+          allergens={allergens}
+        />
       </div>
     );
   }
@@ -122,3 +124,25 @@ const Recipe = () => {
 };
 
 export default Recipe;
+
+export const getStaticProps = async () => {
+  const allergens = await prisma.allergen.findMany();
+
+  return {
+    props: { allergens },
+  };
+};
+
+export const getStaticPaths = async () => {
+  const recipes = await prisma.recipe.findMany({
+    select: {
+      slug: true,
+    },
+  });
+  const paths = recipes.map((slug) => ({ params: slug }));
+
+  return {
+    paths,
+    fallback: true,
+  };
+};

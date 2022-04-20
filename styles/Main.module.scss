@@ -21,6 +21,8 @@
 }
 
 .btn {
+  position: relative;
+  z-index: 0;
   padding: $default-padding;
   background-color: $orange;
   border-radius: $border-radius * 2;
