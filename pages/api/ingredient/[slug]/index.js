@@ -17,7 +17,7 @@ const handle = async (req, res) => {
   }
 };
 
-// GET /api/ngredient/[slug]
+// GET /api/ingredient/[slug]
 const handleGet = async (slug, session, res) => {
   const ingredient = await prisma.ingredient.findUnique({
     where: {
@@ -27,7 +27,7 @@ const handleGet = async (slug, session, res) => {
       },
     },
   });
-  res.json(ingredient);
+  res.status(200).json(ingredient);
 };
 
 export default handle;

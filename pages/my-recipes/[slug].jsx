@@ -3,20 +3,17 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useState } from "react";
 import { container, header, btn } from "styles/Main.module.scss";
 import { unitConverter } from "lib/converters";
 import { computeIngredientPrice } from "lib/computePrice";
 import IngredientOnRecipe from "components/Forms/IngredientOnRecipe";
 import prisma from "lib/prismaClient";
+import { TrashIcon } from "components/Icons";
 
 const Recipe = ({ allergens }) => {
-  const [ingredientName, setIngredientName] = useState("");
-  const [ingredientQuantity, setIngredientQuantity] = useState(0);
-  const [ingredientUnit, setIngredientUnit] = useState("g");
-
   const router = useRouter();
   const { slug } = router.query;
+
   const queryClient = useQueryClient();
 
   const { data: recipe, isLoading: recipeLoading } = useQuery(
@@ -29,37 +26,19 @@ const Recipe = ({ allergens }) => {
     async () => await axios.get("/api/ingredients")
   );
 
-  const addIngredient = useMutation(
-    async () => {
-      const ingredient = await axios.post("/api/ingredients-on-recipe", {
-        recipeId: recipe.data.id,
-        ingredientId: ingredients.data.find(
-          (ingredient) => ingredient.name === ingredientName
-        ).id,
-        quantity: ingredientQuantity,
-        unit: ingredientUnit,
-      });
-
-      return ingredient.data;
+  const deleteIngredient = useMutation(
+    async (id) => {
+      await axios.delete(`/api/ingredients-on-recipe/${id}`);
     },
     {
       onSuccess: async (data) => {
         queryClient.invalidateQueries(["recipes", slug]);
-        setIngredientName("");
-        setIngredientQuantity(0);
-        setIngredientUnit("g");
       },
       onError: async (err) => {
         console.error(err);
       },
     }
   );
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    addIngredient.mutate();
-  };
 
   if (recipeLoading || ingredientsLoading) {
     return <div>Loading...</div>;
@@ -107,6 +86,9 @@ const Recipe = ({ allergens }) => {
                   € )
                 </a>
               </Link>
+              <button onClick={() => deleteIngredient.mutate(ingredient.id)}>
+                <TrashIcon style={{ height: "1rem" }} />
+              </button>
             </li>
           ))}
         </ul>
