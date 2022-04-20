@@ -77,6 +77,10 @@ const Recipe = () => {
         </Link>
         <div className={header}>
           <h2>{recipe.data.name}</h2>
+          <div>
+            Prix pour 
+            <input type="number" />
+          </div>
         </div>
         <ul>
           {recipe.data?.ingredients?.map((ingredient) => (
