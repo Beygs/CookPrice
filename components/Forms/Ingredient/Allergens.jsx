@@ -11,7 +11,7 @@ import { btn } from "styles/Main.module.scss";
 import { useState } from "react";
 
 const Allergens = ({ prevStep, nextStep, values, handleAllergenChange }) => {
-  const { name, price, unit, allergens } = values;
+  const { name, price, unit, allergens, setName } = values;
 
   const [btnTxt, setBtnTxt] = useState("Ajouter l'ingrédient");
   const [btnsDisabled, setBtnsDisabled] = useState(false);
@@ -46,9 +46,10 @@ const Allergens = ({ prevStep, nextStep, values, handleAllergenChange }) => {
       return ingredient;
     },
     {
-      onSuccess: async () => {
+      onSuccess: async (data) => {
         queryClient.invalidateQueries("ingredients");
         nextStep();
+        if (setName) setName(name);
       },
       onError: async (err) => {
         console.error(err);

@@ -11,6 +11,7 @@ import {
 import { btn } from "styles/Main.module.scss";
 import cn from "classnames";
 import { useState, useRef, useEffect } from "react";
+import { capitalize } from "lib/utils";
 
 const IngredientInfos = ({ nextStep, handleChange, values }) => {
   const { name, price, unit, ingredients } = values;

@@ -1,5 +1,6 @@
 import "styles/globals.css";
 import "styles/reset.scss";
+import "styles/react-datalist-input.scss";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";

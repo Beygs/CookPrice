@@ -1,3 +1,4 @@
+import { capitalize } from "lib/utils";
 import { Component } from "react";
 import Allergens from "./Allergens";
 import IngredientInfos from "./IngredientInfos";
@@ -15,6 +16,7 @@ export default class Ingredient extends Component {
       presence: "none",
     })),
     ingredients: this.props.ingredients,
+    setName: this.props.setName,
   };
 
   prevStep = () => {
@@ -28,7 +30,9 @@ export default class Ingredient extends Component {
   };
 
   handleChange = (input) => (e) => {
-    this.setState({ [input]: e.target.value });
+    const value =
+      input === "name" ? capitalize(e.target.value) : e.target.value;
+    this.setState({ [input]: value });
   };
 
   handleAllergenChange = (id, type) => (e) => {
@@ -45,13 +49,14 @@ export default class Ingredient extends Component {
   };
 
   render() {
-    const { step, name, price, unit, allergens, ingredients } = this.state;
+    const { step, name, price, unit, allergens, ingredients, setName } = this.state;
     const values = {
       name,
       price,
       unit,
       allergens,
       ingredients,
+      setName,
     };
 
     switch (step) {

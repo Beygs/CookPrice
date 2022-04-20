@@ -1,7 +1,9 @@
 import axios from "axios";
 import Modal from "components/Modal";
 import { unitsHash } from "lib/constants/units";
-import { useState, useEffect } from "react";
+import { capitalize } from "lib/utils";
+import { useState, useEffect, useCallback } from "react";
+import DatalistInput, { useComboboxControls } from "react-datalist-input";
 import { useMutation, useQueryClient } from "react-query";
 import { btn } from "styles/Main.module.scss";
 import {
@@ -13,7 +15,9 @@ import {
 import Ingredient from "../Ingredient";
 
 const IngredientOnRecipe = ({ recipe, ingredients, slug, allergens }) => {
-  const [name, setName] = useState("");
+  const { value: name, setValue: setName } = useComboboxControls({
+    initialValue: "",
+  });
   const [quantity, setQuantity] = useState(0);
   const [unit, setUnit] = useState();
   const [showModal, setShowModal] = useState(false);
@@ -33,6 +37,11 @@ const IngredientOnRecipe = ({ recipe, ingredients, slug, allergens }) => {
   const ingredientsList = ingredients.data.filter(
     (ingredient) => !recipeIngredients?.find((i) => i.id === ingredient.id)
   );
+
+  const options = ingredientsList?.map((ingredient) => ({
+    id: ingredient.name,
+    value: ingredient.name,
+  }));
 
   useEffect(() => {
     const ingredient = ingredients.data.find(
@@ -79,6 +88,23 @@ const IngredientOnRecipe = ({ recipe, ingredients, slug, allergens }) => {
     addIngredient.mutate();
   };
 
+  const containsValueFilter = useCallback(
+    (options, value) =>
+      options.filter((option) => {
+        const regex = new RegExp(value, "gi");
+        return regex.test(option.value);
+      }),
+    []
+  );
+
+  const isNotCreatedFilter = useCallback(
+    (options, value) =>
+      !ingredientsList.find((ingredient) => ingredient.name === value) && value
+        ? [...options, { id: "Add", value: "Ajouter un ingrédient" }]
+        : options,
+    [ingredientsList]
+  );
+
   return (
     <>
       {showModal && (
@@ -87,39 +113,27 @@ const IngredientOnRecipe = ({ recipe, ingredients, slug, allergens }) => {
             ingredients={ingredients.data}
             allergens={allergens}
             name={name}
+            setName={setName}
           />
         </Modal>
       )}
       <form onSubmit={handleSubmit}>
         <div className={multiInputWrapper}>
-          <input
+          <DatalistInput
             value={name}
-            list="ingredients-list"
             placeholder="Ajouter un ingrédient"
-            className={input}
-            onChange={(e) => {
-              if (e.target.value === " Ajouter l'ingrédient")
-                return setShowModal(true);
-              setName(e.target.value.trimStart());
+            items={options}
+            onSelect={(selected) => {
+              if (selected.id === "Add") return setShowModal(true);
+
+              setName(selected.value);
             }}
+            setValue={(value) => {
+              if (value !== "Ajouter un ingrédient") setName(capitalize(value));
+            }}
+            onChange={(e) => setName(capitalize(e.target.value))}
+            filters={[containsValueFilter, isNotCreatedFilter]}
           />
-          <datalist id="ingredients-list">
-            {ingredientsList?.map((ingredient) => (
-              <option key={ingredient.id} value={ingredient.name} />
-            ))}
-            {name &&
-              !ingredientsList.find(
-                (ingredient) =>
-                  ingredient.name.toLowerCase() === name.toLowerCase()
-              ) && (
-                <option
-                  value=" Ajouter l'ingrédient"
-                  onClick={() => setShowModal(true)}
-                >
-                  {name}
-                </option>
-              )}
-          </datalist>
           {ingredients.data.find((ingredient) => ingredient.name === name) && (
             <>
               <input
