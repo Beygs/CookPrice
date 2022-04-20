@@ -7,18 +7,22 @@ import { useMutation, useQueryClient } from "react-query";
 import { btn } from "styles/Main.module.scss";
 import {
   form,
+  multiInputWrapper,
   inputWrapper,
   input,
+  select,
   invalid,
   note,
   active,
 } from "../Forms.module.scss";
 
 const Recipe = ({ recipes, setShow }) => {
-  const nameRef = useRef()
+  const nameRef = useRef();
 
   const [name, setName] = useState("");
   const [invalidName, setInvalidName] = useState(false);
+  const [quantity, setQuantity] = useState();
+  const [unit, setUnit] = useState("kg");
   const [btnTxt, setBtnTxt] = useState("Ajouter la recette");
   const [btnDisabled, setBtnDisabled] = useState(false);
 
@@ -48,6 +52,8 @@ const Recipe = ({ recipes, setShow }) => {
       const response = await axios.post("/api/recipe", {
         name,
         userId: session.user.id,
+        quantity,
+        unit,
       });
 
       return response.data;
@@ -56,13 +62,13 @@ const Recipe = ({ recipes, setShow }) => {
       onSuccess: async (data) => {
         queryClient.invalidateQueries("recipes");
         setShow(false);
-        router.push(`/my-recipes/${data.slug}`)
+        router.push(`/my-recipes/${data.slug}`);
       },
       onError: async (err) => {
         console.error(err);
         setBtnTxt("Ajouter la recette");
         setBtnDisabled(false);
-      }
+      },
     }
   );
 
@@ -70,30 +76,57 @@ const Recipe = ({ recipes, setShow }) => {
     e.preventDefault();
 
     newRecipeMutation.mutate();
-  }
+  };
 
   return (
     <form className={form} onSubmit={handleSubmit}>
-      <div className={inputWrapper}>
-        <input
-          className={cn(input, {
-            [invalid]: invalidName,
-          })}
-          type="text"
-          placeholder="Nom de la recette"
-          value={name}
-          ref={nameRef}
-          onChange={handleChange}
-        />
-        <p
-          className={cn(note, {
-            [active]: invalidName,
-          })}
-        >
-          Recette déjà existante
-        </p>
+      <div>
+        <div className={inputWrapper}>
+          <input
+            className={cn(input, {
+              [invalid]: invalidName,
+            })}
+            type="text"
+            placeholder="Nom de la recette"
+            value={name}
+            ref={nameRef}
+            onChange={handleChange}
+          />
+          <p
+            className={cn(note, {
+              [active]: invalidName,
+            })}
+          >
+            Recette déjà existante
+          </p>
+        </div>
+        <div className={multiInputWrapper}>
+          <input
+            type="number"
+            className={input}
+            placeholder="Quantité de référence"
+            value={quantity}
+            min="0"
+            onChange={(e) => setQuantity(e.target.value)}
+          />
+          <select className={`${input} ${select}`} value={unit} onChange={(e) => setUnit(e.target.value)}>
+            <option value="kg">kg</option>
+            <option value="g">g</option>
+            <option value="mg">mg</option>
+            <option value="L">L</option>
+            <option value="dl">dl</option>
+            <option value="cl">cl</option>
+            <option value="ml">ml</option>
+            <option value="personnes">personnes</option>
+          </select>
+        </div>
       </div>
-      <input type="submit" className={btn} value={btnTxt} disabled={!canSave && !btnDisabled} />
+      <input
+        type="submit"
+        className={btn}
+        value={btnTxt}
+        disabled={!canSave && !btnDisabled}
+      />
     </form>
   );
 };

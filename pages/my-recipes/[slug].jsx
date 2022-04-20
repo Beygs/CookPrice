@@ -78,8 +78,7 @@ const Recipe = () => {
         <div className={header}>
           <h2>{recipe.data.name}</h2>
           <div>
-            Prix pour 
-            <input type="number" />
+            Quantité de référence : {recipe.data.quantity} {recipe.data.unit}
           </div>
         </div>
         <ul>

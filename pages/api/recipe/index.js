@@ -3,14 +3,16 @@
 import prisma from "lib/prismaClient";
 import slugify from "slugify";
 
-// Required fields: name, userId
+// Required fields: name, userId, quantity, unit
 const newRecipe = async (req, res) => {
-  const { name, userId } = req.body;
+  const { name, userId, quantity, unit } = req.body;
 
   try {
     const result = await prisma.recipe.create({
       data: {
         name,
+        quantity: parseInt(quantity),
+        unit,
         user: { connect: { id: userId } },
         slug: slugify(name, {
           lower: true,
