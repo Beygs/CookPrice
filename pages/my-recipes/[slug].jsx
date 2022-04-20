@@ -13,7 +13,7 @@ import {
 } from "components/Forms/Forms.module.scss";
 import { unitConverter } from "lib/converters";
 import { computeIngredientPrice } from "lib/computePrice";
-import MyRecipes from ".";
+import IngredientOnRecipe from "components/Forms/IngredientOnRecipe";
 
 const Recipe = () => {
   const [ingredientName, setIngredientName] = useState("");
@@ -113,56 +113,7 @@ const Recipe = () => {
             </li>
           ))}
         </ul>
-        <form onSubmit={handleSubmit}>
-          <div className={multiInputWrapper}>
-            <input
-              value={ingredientName}
-              list="ingredients-list"
-              placeholder="Ajouter un ingrédient"
-              className={input}
-              onChange={(e) => setIngredientName(e.target.value)}
-            />
-            <datalist id="ingredients-list">
-              {ingredients?.data?.map((ingredient) => (
-                <option key={ingredient.id} value={ingredient.name} />
-              ))}
-            </datalist>
-            {ingredientName && (
-              <>
-                <input
-                  type="number"
-                  className={input}
-                  style={{
-                    width: "20%",
-                    minWidth: "85px",
-                  }}
-                  min="0"
-                  value={ingredientQuantity}
-                  onChange={(e) => setIngredientQuantity(e.target.value)}
-                />
-                <select
-                  value={ingredientUnit}
-                  className={`${input} ${select}`}
-                  style={{
-                    width: "20%",
-                    minWidth: "100px",
-                  }}
-                  onChange={(e) => setIngredientUnit(e.target.value)}
-                >
-                  <option value="g">g</option>
-                  <option value="mg">mg</option>
-                  <option value="kg">kg</option>
-                  <option value="L">L</option>
-                  <option value="ml">ml</option>
-                  <option value="cl">cl</option>
-                  <option value="dl">dl</option>
-                  <option value="unité">unités</option>
-                </select>
-              </>
-            )}
-          </div>
-          <input type="submit" value="Ajouter l'ingrédient" className={btn} />
-        </form>
+        <IngredientOnRecipe recipe={recipe} ingredients={ingredients} slug={slug} />
       </div>
     );
   }
