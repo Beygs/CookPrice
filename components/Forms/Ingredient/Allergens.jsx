@@ -44,11 +44,11 @@ const Allergens = ({ prevStep, nextStep, values, handleAllergenChange }) => {
       });
     },
     {
-      onSuccess: () => {
+      onSuccess: async () => {
         queryClient.invalidateQueries("ingredients");
         nextStep();
       },
-      onError: (err) => {
+      onError: async (err) => {
         console.error(err);
         setBtnTxt("Ajouter l'ingrédient");
         setBtnDisabled(false);

@@ -12,7 +12,8 @@ import {
   select,
 } from "components/Forms/Forms.module.scss";
 import { unitConverter } from "lib/converters";
-import { computePrice } from "lib/computePrice";
+import { computeIngredientPrice } from "lib/computePrice";
+import MyRecipes from ".";
 
 const Recipe = () => {
   const [ingredientName, setIngredientName] = useState("");
@@ -78,7 +79,21 @@ const Recipe = () => {
         <div className={header}>
           <h2>{recipe.data.name}</h2>
           <div>
-            Quantité de référence : {recipe.data.quantity} {recipe.data.unit}
+            <p>Quantité de référence : {recipe.data.quantity} {recipe.data.unit}</p>
+            <p>
+              Prix :{" "}
+              {recipe.data.ingredients
+                ?.map((ingredient) =>
+                  parseFloat(
+                    computeIngredientPrice(
+                      unitConverter(ingredient.quantity, ingredient.unit),
+                      ingredient.ingredient.price
+                    )
+                  )
+                )
+                .reduce((a, b) => a + b, 0)}{" "}
+              €
+            </p>
           </div>
         </div>
         <ul>
@@ -87,7 +102,12 @@ const Recipe = () => {
               <Link href={`/my-ingredients/${ingredient.ingredient.slug}`}>
                 <a>
                   {ingredient.ingredient.name} =&gt; {ingredient.quantity}{" "}
-                  {ingredient.unit} ({computePrice(unitConverter(ingredient.quantity, ingredient.unit), ingredient.ingredient.price)})
+                  {ingredient.unit} (
+                  {computeIngredientPrice(
+                    unitConverter(ingredient.quantity, ingredient.unit),
+                    ingredient.ingredient.price
+                  )}
+                  )
                 </a>
               </Link>
             </li>
