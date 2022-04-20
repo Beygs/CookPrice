@@ -36,6 +36,7 @@ const handleGet = async (slug, session, res) => {
               price: true,
               unit: true,
               slug: true,
+              id: true,
             },
           },
         },
