@@ -11,6 +11,8 @@ import {
   multiInputWrapper,
   select,
 } from "components/Forms/Forms.module.scss";
+import { unitConverter } from "lib/converters";
+import { computePrice } from "lib/computePrice";
 
 const Recipe = () => {
   const [ingredientName, setIngredientName] = useState("");
@@ -82,7 +84,7 @@ const Recipe = () => {
               <Link href={`/my-ingredients/${ingredient.ingredient.slug}`}>
                 <a>
                   {ingredient.ingredient.name} =&gt; {ingredient.quantity}{" "}
-                  {ingredient.unit}
+                  {ingredient.unit} ({computePrice(unitConverter(ingredient.quantity, ingredient.unit), ingredient.ingredient.price)})
                 </a>
               </Link>
             </li>
@@ -130,6 +132,7 @@ const Recipe = () => {
                   <option value="L">L</option>
                   <option value="ml">ml</option>
                   <option value="cl">cl</option>
+                  <option value="dl">dl</option>
                   <option value="unité">unités</option>
                 </select>
               </>

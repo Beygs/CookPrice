@@ -1,5 +1,9 @@
 @use "styles/abstracts/variables" as *;
 
+.hamburgerContainer {
+  position: relative;
+}
+
 .hamburgerIconBtn {
   border: none;
   background: none;
@@ -22,7 +26,7 @@
   display: none;
   position: absolute;
   padding: $default-padding;
-  top: 100%;
+  top: calc(100% + $default-padding);
   right: 0;
   border: 1px solid $light-grey;
   border-radius: $border-radius;

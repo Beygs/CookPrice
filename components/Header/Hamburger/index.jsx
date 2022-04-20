@@ -1,4 +1,5 @@
 import {
+  hamburgerContainer,
   hamburgerIconBtn,
   hamburgerIcon,
   active,
@@ -16,7 +17,7 @@ const Hamburger = () => {
   const [session] = useSession();
 
   return (
-    <>
+    <div className={hamburgerContainer}>
       <button
         className={hamburgerIconBtn}
         onClick={() => setMenuOpened((prev) => !prev)}
@@ -48,7 +49,7 @@ const Hamburger = () => {
           <LoggedOutMenu menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
         </>
       )}
-    </>
+    </div>
   );
 };
 
