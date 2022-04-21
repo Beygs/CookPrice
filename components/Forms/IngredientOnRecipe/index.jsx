@@ -71,7 +71,7 @@ const IngredientOnRecipe = ({ recipe, ingredients, slug, allergens }) => {
     },
     {
       onSuccess: async (data) => {
-        queryClient.setQueryData(["recipes", slug], data);
+        queryClient.invalidateQueries(["recipes", slug]);
         setName("");
         setQuantity(0);
         setUnit("g");
