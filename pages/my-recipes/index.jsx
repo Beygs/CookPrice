@@ -9,10 +9,14 @@ import { container, header, btn } from "styles/Main.module.scss";
 const MyRecipes = () => {
   const [showNewRecipeModal, setShowNewRecipeModal] = useState(false);
 
-  const { data: recipes } = useQuery(
+  const { data: recipes, isLoading } = useQuery(
     "recipes",
     async () => await axios.get("/api/recipes")
   );
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={container}>
