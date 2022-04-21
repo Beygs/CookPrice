@@ -81,7 +81,7 @@ const Recipe = ({ allergens }) => {
                     )
                   )
                 )
-                .reduce((a, b) => a + b, 0)}{" "}
+                .reduce((a, b) => a + b, 0).toFixed(2)}{" "}
               €
             </p>
           </div>
