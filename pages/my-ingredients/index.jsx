@@ -14,12 +14,12 @@ const MyIngredients = ({ allergens }) => {
 
   const [session, loading] = useSession();
 
-  const { data: ingredients } = useQuery(
+  const { data: ingredients, isLoading } = useQuery(
     "ingredients",
     async () => await axios.get("/api/ingredients")
   );
 
-  if (loading) {
+  if (loading || isLoading) {
     return (
       <div>
         Loading...
