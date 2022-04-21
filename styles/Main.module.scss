@@ -37,3 +37,17 @@
     opacity: 0.6;
   }
 }
+
+.pencilIcon {
+
+  &:hover {
+    fill: $aqua;
+  }
+}
+
+.trashIcon {
+
+  &:hover {
+    fill: $red;
+  }
+}

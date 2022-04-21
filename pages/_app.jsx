@@ -1,4 +1,4 @@
-import "styles/globals.css";
+import "styles/globals.scss";
 import "styles/reset.scss";
 import "styles/react-datalist-input.scss";
 import { SessionProvider } from "next-auth/react";

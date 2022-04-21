@@ -39,6 +39,11 @@ const handleGet = async (slug, session, res) => {
               id: true,
             },
           },
+          recipe: {
+            select: {
+              slug: true,
+            },
+          },
         },
       },
     },

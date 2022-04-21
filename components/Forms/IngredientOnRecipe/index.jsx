@@ -70,8 +70,8 @@ const IngredientOnRecipe = ({ recipe, ingredients, slug, allergens }) => {
       return ingredient.data;
     },
     {
-      onSuccess: async () => {
-        queryClient.invalidateQueries(["recipes", slug]);
+      onSuccess: async (data) => {
+        queryClient.setQueryData(["recipes", slug], data);
         setName("");
         setQuantity(0);
         setUnit("g");
