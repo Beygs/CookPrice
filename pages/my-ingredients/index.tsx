@@ -8,7 +8,6 @@ import styles from "styles/Main.module.scss";
 import ingredientsStyles from "./MyIngredients.module.scss";
 import NewIngredientForm from "components/Forms/Ingredient";
 import { useSession } from "components/hooks/useSession";
-import { signIn, SignInResponse } from "next-auth/react";
 import { Allergen, Ingredient } from "@prisma/client";
 
 interface Props {

@@ -9,7 +9,7 @@ interface Props {
   name?: string;
   allergens: Allergen[];
   ingredients: Ingredient[];
-  setName: React.Dispatch<React.SetStateAction<string>>;
+  setName?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface State {
