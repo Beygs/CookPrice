@@ -5,15 +5,22 @@ import Image from "next/image";
 const Component = () => {
   const [session, loading] = useSession();
 
+  const imgSrc =
+    typeof session === "boolean"
+      ? undefined
+      : `/api/imageproxy?url=${encodeURIComponent(session?.user?.image)}`;
+
+  if (typeof session === "boolean") throw new Error("There's a session problem...");
+
   if (loading) {
-    return (<div>Loading...</div>)
+    return <div>Loading...</div>;
   }
-  
+
   if (session) {
     return (
       <>
         <Image
-          src={`/api/imageproxy?url=${encodeURIComponent(session.user.image)}`}
+          src={`/api/imageproxy?url=${imgSrc}`}
           width="100px"
           height="100px"
           alt="Profile picture"
@@ -31,6 +38,6 @@ const Component = () => {
       <button onClick={() => signIn()}>Sign in</button>
     </>
   );
-}
+};
 
 export default Component;
