@@ -1,4 +1,13 @@
-import formsStyles from "../Forms.module.scss";
+import {
+  form,
+  input,
+  invalid,
+  inputWrapper,
+  note,
+  active,
+  multiInputWrapper,
+  select,
+} from "../Forms.module.scss";
 import styles from "styles/Main.module.scss";
 import cn from "classnames";
 import React, { useState, useRef, useEffect } from "react";
@@ -10,19 +19,12 @@ interface Props {
   handleChange: (input: any) => (e: any) => void;
 }
 
-const IngredientInfos: React.FC<Props> = ({ nextStep, handleChange, values }) => {
+const IngredientInfos: React.FC<Props> = ({
+  nextStep,
+  handleChange,
+  values,
+}) => {
   const { name, price, unit, ingredients } = values;
-
-  const {
-    form,
-    input,
-    invalid,
-    inputWrapper,
-    note,
-    active,
-    multiInputWrapper,
-    select,
-  } = formsStyles;
 
   const nameRef = useRef<HTMLInputElement>();
 

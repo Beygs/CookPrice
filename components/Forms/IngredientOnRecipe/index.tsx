@@ -7,7 +7,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import DatalistInput, { useComboboxControls } from "react-datalist-input";
 import { useMutation, useQueryClient } from "react-query";
 import styles from "styles/Main.module.scss";
-import formsStyles from "../Forms.module.scss";
+import { input, multiInputWrapper, select } from "../Forms.module.scss";
 import IngredientForm from "../Ingredient";
 
 interface Props {
@@ -26,8 +26,6 @@ interface RecipeWithIngredients extends Recipe {
 }
 
 const IngredientOnRecipe: React.FC<Props> = ({ recipe, ingredients, allergens }) => {
-  const { input, multiInputWrapper, select } = formsStyles;
-
   const { value: name, setValue: setName } = useComboboxControls({
     initialValue: "",
     isExpanded: false,
