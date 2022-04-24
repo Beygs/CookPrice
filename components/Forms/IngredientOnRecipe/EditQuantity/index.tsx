@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import formsStyles from "components/Forms/Forms.module.scss";
+import { form, multiInputWrapper, input, select } from "components/Forms/Forms.module.scss";
 import styles from "styles/Main.module.scss";
 import { unitsHash } from "lib/constants/units";
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 
 const EditIngredientQuantity = ({ ingredient, setShow }) => {
-  const { form, multiInputWrapper, input, select } = formsStyles;
-
   const [quantity, setQuantity] = useState(parseInt(ingredient.quantity));
   const [unit, setUnit] = useState(ingredient.unit);
 

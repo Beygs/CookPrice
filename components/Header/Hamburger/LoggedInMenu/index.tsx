@@ -4,7 +4,7 @@ import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import styles from "../Hamburger.module.scss";
+import { navItems, hamburgerMenu, active } from "../Hamburger.module.scss";
 
 interface Props {
   menuOpened: boolean;
@@ -12,7 +12,6 @@ interface Props {
 }
 
 const LoggedInMenu: React.FC<Props> = ({ menuOpened, setMenuOpened }) => {
-  const { navItems, hamburgerMenu, active } = styles;
   const [session] = useSession();
 
   const imgSrc =
