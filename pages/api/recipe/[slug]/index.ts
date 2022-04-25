@@ -13,6 +13,9 @@ const handle = async (req: NextApiRequest, res: NextApiResponse) => {
     case "GET": {
       return handleGet(slug, session, res);
     }
+    case "DELETE": {
+      return handleDelete(slug, session, res);
+    }
     default: {
       throw new Error(
         `The HTTP ${req.method} method is not supported at this route.`
@@ -55,5 +58,22 @@ const handleGet = async (slug: string, session: Session, res: NextApiResponse) =
 
   res.json(recipe);
 };
+
+const handleDelete = async (slug: string, session: Session, res: NextApiResponse) => {
+  try {
+    await prisma.recipe.delete({
+      where: {
+        slugUserId: {
+          userId: session.user.id,
+          slug,
+        }
+      }
+    });
+
+    res.status(200).json({ message: "Deletion complete!" });
+  } catch (err) {
+    res.status(403).json({ error: err });
+  }
+}
 
 export default handle;

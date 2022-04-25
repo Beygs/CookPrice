@@ -79,6 +79,26 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
     }
   );
 
+  const deleteRecipe = useMutation(
+    async () => {
+      await axios.delete(`/api/recipe/${slug}`);
+    },
+    {
+      onSuccess: async () => {
+        queryClient.invalidateQueries(["recipes", slug]);
+        router.push("/my-recipes");
+      },
+      onError: async (err) => {
+        console.error(err);
+      },
+    }
+  );
+
+  const handleDelete = () => {
+    const canDelete = confirm("Êtes vous sûr de vouloir supprimer cette recette ? (cette action est irréversible)");
+    if (canDelete) deleteRecipe.mutate();
+  }
+
   if (recipeLoading || ingredientsLoading || loading) {
     return <div>Loading...</div>;
   }
@@ -91,7 +111,17 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
           <a>&lt; Voir toutes mes recettes</a>
         </Link>
         <div className={styles.header}>
-          <h2>{recipe.data.name}</h2>
+          <div className={recipesStyles.name}>
+            <h2>{recipe.data.name}</h2>
+            <div className={recipesStyles.actions}>
+              <button>
+                <PencilIcon className={styles.pencilIcon} />
+              </button>
+              <button onClick={handleDelete}>
+                <TrashIcon className={styles.trashIcon} />
+              </button>
+            </div>
+          </div>
           <div>
             <p>
               Quantité de référence : {recipe.data.quantity} {recipe.data.unit}
