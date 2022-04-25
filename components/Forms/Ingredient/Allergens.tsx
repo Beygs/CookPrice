@@ -1,12 +1,7 @@
 import axios from "axios";
 import { useSession } from "components/hooks/useSession";
 import { useMutation, useQueryClient } from "react-query";
-import {
-  form,
-  checkboxWrapper,
-  allergen as allergenStyle,
-  actions,
-} from "../Forms.module.scss";
+import formsStyles from "../Forms.module.scss";
 import styles from "styles/Main.module.scss";
 import React, { useState } from "react";
 
@@ -24,13 +19,15 @@ interface Props {
   handleAllergenChange: (id: any, type: any) => (e: any) => void;
 }
 
-const Allergens: React.FC<Props> = ({
-  prevStep,
-  nextStep,
-  values,
-  handleAllergenChange,
-}) => {
+const Allergens: React.FC<Props> = ({ prevStep, nextStep, values, handleAllergenChange }) => {
   const { name, price, unit, allergens, setName } = values;
+
+  const {
+    form,
+    checkboxWrapper,
+    allergen: allergenStyle,
+    actions,
+  } = formsStyles;
 
   const [btnTxt, setBtnTxt] = useState("Ajouter l'ingrédient");
   const [btnsDisabled, setBtnsDisabled] = useState(false);
@@ -38,8 +35,7 @@ const Allergens: React.FC<Props> = ({
   const queryClient = useQueryClient();
   const [session] = useSession();
 
-  if (typeof session === "boolean")
-    throw new Error("There's a session problem...");
+  if (typeof session === "boolean") throw new Error("There's a session problem...");
 
   const newIngredientMutation = useMutation(
     async () => {
@@ -119,18 +115,10 @@ const Allergens: React.FC<Props> = ({
         </div>
       ))}
       <div className={actions}>
-        <button
-          className={styles.btn}
-          disabled={btnsDisabled}
-          onClick={handlePrev}
-        >
+        <button className={styles.btn} disabled={btnsDisabled} onClick={handlePrev}>
           Précédent
         </button>
-        <button
-          className={styles.btn}
-          disabled={btnsDisabled}
-          onClick={handleNext}
-        >
+        <button className={styles.btn} disabled={btnsDisabled} onClick={handleNext}>
           {btnTxt}
         </button>
       </div>

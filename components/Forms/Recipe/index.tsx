@@ -5,18 +5,20 @@ import { useRouter } from "next/router";
 import React, { useState, useRef, useEffect } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import styles from "styles/Main.module.scss";
-import {
-  form,
-  multiInputWrapper,
-  inputWrapper,
-  input,
-  select,
-  invalid,
-  note,
-  active,
-} from "../Forms.module.scss";
+import formsStyles from "../Forms.module.scss";
 
 const Recipe = ({ recipes, setShow }) => {
+  const {
+    form,
+    multiInputWrapper,
+    inputWrapper,
+    input,
+    select,
+    invalid,
+    note,
+    active,
+  } = formsStyles;
+
   const nameRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState("");
@@ -49,8 +51,7 @@ const Recipe = ({ recipes, setShow }) => {
       setBtnTxt("Ajout en cours...");
       setBtnDisabled(true);
 
-      if (typeof session === "boolean")
-        throw new Error("There's a session problem...");
+      if (typeof session === "boolean") throw new Error("There's a session problem...");
 
       const response = await axios.post("/api/recipe", {
         name,
