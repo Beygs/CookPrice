@@ -19,7 +19,7 @@ import {
   IngredientsOnRecipes,
   Recipe,
 } from "@prisma/client";
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { useSession } from "components/hooks/useSession";
 
 interface Props {
@@ -203,24 +203,10 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
 
 export default Recipe;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const allergens = await prisma.allergen.findMany();
 
   return {
     props: { allergens },
-  };
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const recipes = await prisma.recipe.findMany({
-    select: {
-      slug: true,
-    },
-  });
-  const paths = recipes.map((slug) => ({ params: slug }));
-
-  return {
-    paths,
-    fallback: true,
   };
 };

@@ -1,5 +1,6 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "lib/prismaClient";
+import { Session } from "next-auth";
 import NextAuth from "next-auth/next";
 import Email from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
@@ -18,7 +19,10 @@ export default NextAuth({
   ],
   callbacks: {
     session: async ({ session, user }) => {
-      session.user.id = user.id;
+      session = {
+        ...session,
+        user,
+      };
       return Promise.resolve(session);
     },
   },

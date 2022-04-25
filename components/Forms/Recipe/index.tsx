@@ -30,7 +30,7 @@ const Recipe: React.FC<Props> = ({ recipe, recipes, setShow }) => {
 
   const [name, setName] = useState(recipe?.name ?? "");
   const [invalidName, setInvalidName] = useState(false);
-  const [quantity, setQuantity] = useState<number>(recipe?.quantity ?? 0);
+  const [quantity, setQuantity] = useState<string>(String(recipe?.quantity) ?? "0");
   const [unit, setUnit] = useState(recipe?.unit ?? "kg");
   const [btnTxt, setBtnTxt] = useState(recipe ? "Editer la recette" : "Ajouter la recette");
   const [btnDisabled, setBtnDisabled] = useState(false);
@@ -147,7 +147,7 @@ const Recipe: React.FC<Props> = ({ recipe, recipes, setShow }) => {
             placeholder="Quantité de référence"
             value={quantity}
             min="0"
-            onChange={(e) => setQuantity(parseInt(e.target.value))}
+            onChange={(e) => setQuantity(e.target.value)}
           />
           <select
             className={`${input} ${select}`}
