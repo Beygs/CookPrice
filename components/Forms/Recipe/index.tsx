@@ -1,3 +1,4 @@
+import { Recipe } from "@prisma/client";
 import axios from "axios";
 import cn from "classnames";
 import { useSession } from "components/hooks/useSession";
@@ -7,7 +8,13 @@ import { useMutation, useQueryClient } from "react-query";
 import styles from "styles/Main.module.scss";
 import formsStyles from "../Forms.module.scss";
 
-const Recipe = ({ recipes, setShow }) => {
+interface Props {
+  recipe?: Recipe;
+  recipes: Recipe[];
+  setShow: React.Dispatch<React.SetStateAction<React.ReactElement | boolean>>
+}
+
+const Recipe: React.FC<Props> = ({ recipe, recipes, setShow }) => {
   const {
     form,
     multiInputWrapper,
@@ -21,11 +28,11 @@ const Recipe = ({ recipes, setShow }) => {
 
   const nameRef = useRef<HTMLInputElement>(null);
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState(recipe?.name ?? "");
   const [invalidName, setInvalidName] = useState(false);
-  const [quantity, setQuantity] = useState<number>(null);
-  const [unit, setUnit] = useState("kg");
-  const [btnTxt, setBtnTxt] = useState("Ajouter la recette");
+  const [quantity, setQuantity] = useState<number>(recipe?.quantity ?? 0);
+  const [unit, setUnit] = useState(recipe?.unit ?? "kg");
+  const [btnTxt, setBtnTxt] = useState(recipe ? "Editer la recette" : "Ajouter la recette");
   const [btnDisabled, setBtnDisabled] = useState(false);
 
   const [session] = useSession();
@@ -76,10 +83,39 @@ const Recipe = ({ recipes, setShow }) => {
     }
   );
 
+  const editRecipeMutation = useMutation(
+    async () => {
+      setBtnTxt("Edition en cours...");
+      setBtnDisabled(true);
+
+      if (typeof session === "boolean") throw new Error("There's a session problem...");
+
+      const response = await axios.put(`/api/recipe/${recipe.slug}`, {
+        name,
+        quantity,
+        unit,
+      });
+
+      return response;
+    },
+    {
+      onSuccess: async (response) => {
+        queryClient.invalidateQueries(["recipes", recipe.slug]);
+        setShow(false);
+        router.replace(`/my-recipes/${response.data.slug}`);
+      },
+      onError: async (err) => {
+        console.error(err);
+        setBtnTxt("Editer la recette");
+        setBtnDisabled(false);
+      },
+    }
+  )
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    newRecipeMutation.mutate();
+    recipe ? editRecipeMutation.mutate() : newRecipeMutation.mutate();
   };
 
   return (

@@ -12,6 +12,7 @@ import { PencilIcon, TrashIcon } from "components/Icons";
 import recipesStyles from "./MyRecipes.module.scss";
 import Modal from "components/Modal";
 import EditIngredientQuantity from "components/Forms/IngredientOnRecipe/EditQuantity";
+import RecipeForm from "components/Forms/Recipe";
 import {
   Allergen,
   Ingredient,
@@ -50,8 +51,13 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
   );
 
   const { data: ingredients, isLoading: ingredientsLoading } = useQuery(
-    ["ingredients"],
+    "ingredients",
     async () => await axios.get<Ingredient[]>("/api/ingredients")
+  );
+
+  const { data: recipes } = useQuery(
+    "recipes",
+    async () => await axios.get<Recipe[]>("/api/recipes")
   );
 
   const editIngredient = (ingredient: IngredientsOnRecipesExtended) => {
@@ -79,6 +85,21 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
     }
   );
 
+  const editRecipe = () => {
+    setModal(
+      <Modal
+        name={`Editer ${recipe.data.name}`}
+        setShow={() => setModal(false)}
+      >
+        <RecipeForm
+          recipes={recipes.data}
+          recipe={recipe.data}
+          setShow={setModal}
+        />
+      </Modal>
+    );
+  };
+
   const deleteRecipe = useMutation(
     async () => {
       await axios.delete(`/api/recipe/${slug}`);
@@ -95,9 +116,11 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
   );
 
   const handleDelete = () => {
-    const canDelete = confirm("Êtes vous sûr de vouloir supprimer cette recette ? (cette action est irréversible)");
+    const canDelete = confirm(
+      "Êtes vous sûr de vouloir supprimer cette recette ? (cette action est irréversible)"
+    );
     if (canDelete) deleteRecipe.mutate();
-  }
+  };
 
   if (recipeLoading || ingredientsLoading || loading) {
     return <div>Loading...</div>;
@@ -114,7 +137,7 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
           <div className={recipesStyles.name}>
             <h2>{recipe.data.name}</h2>
             <div className={recipesStyles.actions}>
-              <button>
+              <button onClick={editRecipe}>
                 <PencilIcon className={styles.pencilIcon} />
               </button>
               <button onClick={handleDelete}>
