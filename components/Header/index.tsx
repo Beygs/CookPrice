@@ -1,12 +1,12 @@
 import Link from "next/link";
 import Hamburger from "./Hamburger";
-import { header, nav, navItems } from "./Header.module.scss";
+import styles from "./Header.module.scss";
 
 const Header: React.FC = () => {
   return (
-    <header className={header}>
-      <nav className={nav}>
-        <ul className={navItems}>
+    <header className={styles.header}>
+      <nav className={styles.nav}>
+        <ul className={styles.navItems}>
           <li>
             <Link href="/">
               <a>CookPrice</a>

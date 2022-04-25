@@ -1,7 +1,7 @@
 import cn from "classnames";
 import { signIn } from "next-auth/react";
 import React from "react";
-import { navItems, hamburgerMenu, active } from "../Hamburger.module.scss";
+import styles from "../Hamburger.module.scss";
 
 interface Props {
   menuOpened: boolean;
@@ -9,6 +9,8 @@ interface Props {
 }
 
 const LoggedOutMenu: React.FC<Props> = ({ menuOpened, setMenuOpened }) => {
+  const { navItems, hamburgerMenu, active } = styles;
+
   return (
     <ul
       className={cn(navItems, hamburgerMenu, {

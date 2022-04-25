@@ -20,7 +20,7 @@ const Component = () => {
     return (
       <>
         <Image
-          src={imgSrc}
+          src={`/api/imageproxy?url=${imgSrc}`}
           width="100px"
           height="100px"
           alt="Profile picture"
