@@ -1,7 +1,6 @@
 import { signIn } from "next-auth/react";
 import { useSession } from "components/hooks/useSession";
 import styles from "styles/Main.module.scss";
-import homeStyles from "./Home.module.scss";
 import Link from "next/link";
 
 const Home = () => {
@@ -17,7 +16,7 @@ const Home = () => {
   if (session) {
     return (
       <div className={styles.container}>
-        <h2 className={homeStyles.title}>Bonjour {session.user.name} !</h2>
+        <h2 className={styles.title}>Bonjour {session.user.name} !</h2>
         <div className={styles.header}>
           <Link href="/my-recipes">
             <a className={styles.btn}>
@@ -35,7 +34,7 @@ const Home = () => {
   }
   return (
     <div className={styles.container}>
-      <h2 className={homeStyles.title}>
+      <h2 className={styles.title}>
         Bienvenue sur Cookprice !
       </h2>
       <button className={styles.btn} onClick={() => signIn()}>
