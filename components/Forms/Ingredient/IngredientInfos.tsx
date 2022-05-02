@@ -97,6 +97,7 @@ const IngredientInfos: React.FC<Props> = ({ nextStep, handleChange, values }) =>
             <option value="L">L</option>
             <option value="unité">unité</option>
           </select>
+          <div>(HT)</div>
         </div>
       </div>
 

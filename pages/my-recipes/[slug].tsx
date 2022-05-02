@@ -12,13 +12,14 @@ import { PencilIcon, TrashIcon } from "components/Icons";
 import recipesStyles from "./MyRecipes.module.scss";
 import Modal from "components/Modal";
 import EditIngredientQuantity from "components/Forms/IngredientOnRecipe/EditQuantity";
+import RecipeForm from "components/Forms/Recipe";
 import {
   Allergen,
   Ingredient,
   IngredientsOnRecipes,
   Recipe,
 } from "@prisma/client";
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { useSession } from "components/hooks/useSession";
 
 interface Props {
@@ -50,8 +51,13 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
   );
 
   const { data: ingredients, isLoading: ingredientsLoading } = useQuery(
-    ["ingredients"],
+    "ingredients",
     async () => await axios.get<Ingredient[]>("/api/ingredients")
+  );
+
+  const { data: recipes } = useQuery(
+    "recipes",
+    async () => await axios.get<Recipe[]>("/api/recipes")
   );
 
   const editIngredient = (ingredient: IngredientsOnRecipesExtended) => {
@@ -79,6 +85,43 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
     }
   );
 
+  const editRecipe = () => {
+    setModal(
+      <Modal
+        name={`Editer ${recipe.data.name}`}
+        setShow={() => setModal(false)}
+      >
+        <RecipeForm
+          recipes={recipes.data}
+          recipe={recipe.data}
+          setShow={setModal}
+        />
+      </Modal>
+    );
+  };
+
+  const deleteRecipe = useMutation(
+    async () => {
+      await axios.delete(`/api/recipe/${slug}`);
+    },
+    {
+      onSuccess: async () => {
+        queryClient.invalidateQueries(["recipes", slug]);
+        router.push("/my-recipes");
+      },
+      onError: async (err) => {
+        console.error(err);
+      },
+    }
+  );
+
+  const handleDelete = () => {
+    const canDelete = confirm(
+      "Êtes vous sûr de vouloir supprimer cette recette ? (cette action est irréversible)"
+    );
+    if (canDelete) deleteRecipe.mutate();
+  };
+
   if (recipeLoading || ingredientsLoading || loading) {
     return <div>Loading...</div>;
   }
@@ -88,16 +131,26 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
       <div className={styles.container}>
         {modal}
         <Link href="/my-recipes">
-          <a>&lt; Voir toutes mes recettes</a>
+          <a className={recipesStyles.back}>&lt; Voir toutes mes recettes</a>
         </Link>
         <div className={styles.header}>
-          <h2>{recipe.data.name}</h2>
-          <div>
+          <div className={recipesStyles.name}>
+            <h2>{recipe.data.name}</h2>
+            <div className={recipesStyles.actions}>
+              <button onClick={editRecipe}>
+                <PencilIcon className={styles.pencilIcon} />
+              </button>
+              <button onClick={handleDelete}>
+                <TrashIcon className={styles.trashIcon} />
+              </button>
+            </div>
+          </div>
+          <div className={recipesStyles.infos}>
             <p>
               Quantité de référence : {recipe.data.quantity} {recipe.data.unit}
             </p>
             <p>
-              Prix :{" "}
+              Prix de revient :{" "}
               {recipe.data.ingredients
                 ?.map((ingredient) =>
                   computeIngredientPrice(
@@ -107,7 +160,18 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
                 )
                 .reduce((a, b) => a + b, 0)
                 .toFixed(2)}{" "}
-              €
+              € HT /{" "}
+              {(
+                recipe.data.ingredients
+                  ?.map((ingredient) =>
+                    computeIngredientPrice(
+                      unitConverter(ingredient.quantity, ingredient.unit),
+                      ingredient.ingredient.price
+                    )
+                  )
+                  .reduce((a, b) => a + b, 0) * 1.055
+              ).toFixed(2)}{" "}
+              € TTC
             </p>
           </div>
         </div>
@@ -116,13 +180,21 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
             <li className={recipesStyles.ingredient} key={ingredient.id}>
               <Link href={`/my-ingredients/${ingredient.ingredient.slug}`}>
                 <a>
-                  {ingredient.ingredient.name} =&gt; {ingredient.quantity}{" "}
-                  {ingredient.unit} (
+                  {ingredient.ingredient.name} {ingredient.quantity}{" "}
+                  {ingredient.unit}
+                  <br />
                   {computeIngredientPrice(
                     unitConverter(ingredient.quantity, ingredient.unit),
                     ingredient.ingredient.price
                   )}{" "}
-                  € )
+                  € HT /{" "}
+                  {(
+                    computeIngredientPrice(
+                      unitConverter(ingredient.quantity, ingredient.unit),
+                      ingredient.ingredient.price
+                    ) * 1.055
+                  ).toFixed(2)}{" "}
+                  € TTC
                 </a>
               </Link>
               <div className={recipesStyles.actions}>
@@ -150,24 +222,10 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
 
 export default Recipe;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const allergens = await prisma.allergen.findMany();
 
   return {
     props: { allergens },
-  };
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const recipes = await prisma.recipe.findMany({
-    select: {
-      slug: true,
-    },
-  });
-  const paths = recipes.map((slug) => ({ params: slug }));
-
-  return {
-    paths,
-    fallback: true,
   };
 };

@@ -26,7 +26,6 @@
   display: none;
   position: absolute;
   z-index: 20;
-  padding: $default-padding;
   top: calc(100% + $default-padding);
   right: 0;
   border: 1px solid $light-grey;
@@ -40,6 +39,24 @@
 
 .navItems {
   list-style: none;
+  padding: 0.2rem;
+}
+
+.navItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.2em $default-padding;
+  border-radius: $border-radius;
+
+  button {
+    border: none;
+    background: none;
+  }
+
+  &:hover {
+    background-color: #eee;
+  }
 }
 
 .blocker {
