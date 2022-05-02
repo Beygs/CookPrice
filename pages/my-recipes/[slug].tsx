@@ -131,7 +131,7 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
       <div className={styles.container}>
         {modal}
         <Link href="/my-recipes">
-          <a>&lt; Voir toutes mes recettes</a>
+          <a className={recipesStyles.back}>&lt; Voir toutes mes recettes</a>
         </Link>
         <div className={styles.header}>
           <div className={recipesStyles.name}>
@@ -145,12 +145,12 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
               </button>
             </div>
           </div>
-          <div>
+          <div className={recipesStyles.infos}>
             <p>
               Quantité de référence : {recipe.data.quantity} {recipe.data.unit}
             </p>
             <p>
-              Prix :{" "}
+              Prix de revient :{" "}
               {recipe.data.ingredients
                 ?.map((ingredient) =>
                   computeIngredientPrice(
@@ -160,7 +160,18 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
                 )
                 .reduce((a, b) => a + b, 0)
                 .toFixed(2)}{" "}
-              €
+              € HT /{" "}
+              {(
+                recipe.data.ingredients
+                  ?.map((ingredient) =>
+                    computeIngredientPrice(
+                      unitConverter(ingredient.quantity, ingredient.unit),
+                      ingredient.ingredient.price
+                    )
+                  )
+                  .reduce((a, b) => a + b, 0) * 1.055
+              ).toFixed(2)}{" "}
+              € TTC
             </p>
           </div>
         </div>
@@ -169,13 +180,21 @@ const Recipe: React.FC<Props> = ({ allergens }) => {
             <li className={recipesStyles.ingredient} key={ingredient.id}>
               <Link href={`/my-ingredients/${ingredient.ingredient.slug}`}>
                 <a>
-                  {ingredient.ingredient.name} =&gt; {ingredient.quantity}{" "}
-                  {ingredient.unit} (
+                  {ingredient.ingredient.name} {ingredient.quantity}{" "}
+                  {ingredient.unit}
+                  <br />
                   {computeIngredientPrice(
                     unitConverter(ingredient.quantity, ingredient.unit),
                     ingredient.ingredient.price
                   )}{" "}
-                  € )
+                  € HT /{" "}
+                  {(
+                    computeIngredientPrice(
+                      unitConverter(ingredient.quantity, ingredient.unit),
+                      ingredient.ingredient.price
+                    ) * 1.055
+                  ).toFixed(2)}{" "}
+                  € TTC
                 </a>
               </Link>
               <div className={recipesStyles.actions}>

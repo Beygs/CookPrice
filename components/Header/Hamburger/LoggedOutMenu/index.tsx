@@ -9,7 +9,7 @@ interface Props {
 }
 
 const LoggedOutMenu: React.FC<Props> = ({ menuOpened, setMenuOpened }) => {
-  const { navItems, hamburgerMenu, active } = styles;
+  const { navItems, navItem, hamburgerMenu, active } = styles;
 
   return (
     <ul
@@ -17,7 +17,7 @@ const LoggedOutMenu: React.FC<Props> = ({ menuOpened, setMenuOpened }) => {
         [active]: menuOpened,
       })}
     >
-      <li>
+      <li className={navItem}>
         <button
           onClick={() => {
             setMenuOpened(false);

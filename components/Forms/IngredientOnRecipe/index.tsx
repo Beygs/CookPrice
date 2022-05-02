@@ -190,6 +190,9 @@ const IngredientOnRecipe: React.FC<Props> = ({ recipe, ingredients, allergens })
           value="Ajouter l'ingrédient"
           className={styles.btn}
           disabled={!canSave}
+          style={{
+            marginTop: "1rem"
+          }}
         />
       </form>
     </>

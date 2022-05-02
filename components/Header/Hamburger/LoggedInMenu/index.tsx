@@ -12,7 +12,7 @@ interface Props {
 }
 
 const LoggedInMenu: React.FC<Props> = ({ menuOpened, setMenuOpened }) => {
-  const { navItems, hamburgerMenu, active } = styles;
+  const { navItems, navItem, hamburgerMenu, active } = styles;
   const [session] = useSession();
 
   const imgSrc =
@@ -26,30 +26,34 @@ const LoggedInMenu: React.FC<Props> = ({ menuOpened, setMenuOpened }) => {
         [active]: menuOpened,
       })}
     >
-      <li>
+      <li className={navItem}>
         <Link href="/my-account">
-          <a onClick={() => setMenuOpened(false)}>
+          <a
+            onClick={() => setMenuOpened(false)}
+            style={{ display: "flex", alignItems: "center" }}
+          >
             <Image
               src={imgSrc}
-              width="20px"
-              height="20px"
+              width={50}
+              height={50}
               alt="Profile picture"
+              style={{ borderRadius: "50%" }}
             />
-            Mon&nbsp;compte
+            <p>&nbsp;Mon&nbsp;compte</p>
           </a>
         </Link>
       </li>
-      <li>
+      <li className={navItem}>
         <Link href="/my-recipes">
           <a onClick={() => setMenuOpened(false)}>Mes&nbsp;recettes</a>
         </Link>
       </li>
-      <li>
+      <li className={navItem}>
         <Link href="/my-ingredients">
           <a onClick={() => setMenuOpened(false)}>Mes&nbsp;ingrédients</a>
         </Link>
       </li>
-      <li>
+      <li className={navItem}>
         <button
           onClick={() => {
             setMenuOpened(false);
